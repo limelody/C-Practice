@@ -1,0 +1,104 @@
+//Robot C
+
+task main()
+{
+	displayString(0,"Tuesday evening Tutorial, 23");
+	clearTimer(T1);
+	SensorType[S1] = sensorEV3_Touch;
+	SensorType[S2] = sensorEV3_Ultrasonic;
+	const int ENC_LIMIT = 40 * 360 / ( 2 * PI * 2.75);
+	nMotorEncoder[motorA] = 0;
+
+	while (!getButtonPress(buttonEnter))
+	{}
+
+	if (getButtonPress(buttonEnter))
+	{
+		while (getButtonPress(buttonEnter))
+		{}
+
+		while (SensorValue[S1] == 0)
+ 		{
+            float highest_measure = 0;
+            float left = 0, middle = 0, right = 0;
+
+            //left
+            motor[motorA] = 75;
+            motor[motorC] = -75;
+            wait1Msec(200);
+            
+            motor[motorA] = motor[motorC] = 0;
+            wait1Msec(1000);
+
+            left = SensorValue[S2];
+            if (left > highest_measure)
+               	 highest_measure = left;
+               
+			//back to center
+            motor[motorA] = -75;
+            motor[motorC] = 75;
+            wait1Msec(200);
+            
+            motor[motorA] = motor[motorC] = 0;
+            wait1Msec(1000);
+
+            middle = SensorValue[S2];
+            if (middle > highest_measure)
+               	 highest_measure = middle;
+               
+			//right
+            motor[motorA] = -75;
+            motor[motorC] = 75;
+            wait1Msec(200);
+            
+            motor[motorA] = motor[motorC] = 0;
+            wait1Msec(1000);
+
+            right = SensorValue[S2];
+            if (right > highest_measure)
+               	 highest_measure = right;
+               
+			//back to center
+			motor[motorA] = 75; 
+			motor[motorC] = -75; 
+			wait1Msec(200); 
+						
+
+            if (highest_measure == left)
+            {
+                motor[motorA] = 75;
+                motor[motorC] = -75;
+                wait1Msec(200);
+            }
+
+            else if (highest_measure == middle)
+            {
+                motor[motorA] = 75;
+                motor[motorC] = 75;
+                wait1Msec(200);
+            }
+
+            else if (highest_measure == right)
+            {
+                motor[motorA] = -75;
+                motor[motorC] = 75;
+                wait1Msec(200);   
+           	}
+           	
+           	while (nMotorEncoder[motorA] <= ENC_LIMIT) 
+            {
+           		motor[motorA] = motor[motorC] = 75;
+            }
+             
+            nMotorEncoder[motorA] = 0;
+            
+		} //end of while loop for bumper 
+      
+		motor[motorA] = 0;
+		motor[motorC] = 0;
+		eraseDisplay(); 			
+		displayString(0, "%d seconds", time1[T1] / 1000);
+		wait1Msec(800); 
+
+	}
+}
