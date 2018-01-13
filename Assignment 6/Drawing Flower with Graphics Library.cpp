@@ -1,8 +1,6 @@
-// Melody Li and Julie Lee
-
 #include <cmath>
 #include <fstream>
-#include “ccc_win.h”
+#include â€œccc_win.hâ€
 
 using namespace std;
 
