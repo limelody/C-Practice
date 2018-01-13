@@ -1,0 +1,67 @@
+int red_tile_width_mm()
+{
+	nMotorEncoder[motorA] = 0;
+
+	motor[motorA] = motor[motorC] = 40;
+	while(SensorValue[S2] != (int)colorBlue)
+	{}
+	motor[motorA] = motor[motorC] = 0;
+	wait1Msec(500);
+
+	return (nMotorEncoder[motorA] * 2 * PI * 2.75 * 10)/360;
+}
+
+int blue_tile()
+{
+
+	motor[motorA] = motor[motorC] = 50;
+	while(SensorValue[S2] != (int)colorRed)
+	{}
+	motor[motorA] = motor[motorC] = 0;
+	wait1Msec(500);
+
+	return 0;
+}
+
+int max_value(int width1, int width2, int width3)
+{
+	int max = width1;
+	if (width2 > max)
+		max = width2;
+	if (width3 > max)
+		max = width3;
+	return max;
+}
+
+task main()
+{
+	displayString(0, "Tues late 4:30 group 17");
+
+	SensorType[S2] = sensorEV3_Color;
+	wait1Msec(50);
+  	SensorMode[S2] = modeEV3Color_Color;
+  	wait1Msec(50);
+
+  int width1 = 0, width2 = 0, width3 = 0;
+  for (int count = 0; count < 3;)
+  {
+  	if (SensorValue[S2]==(int)colorRed)
+  	{
+  		if(count == 0)
+  			width1 = red_tile_width_mm();
+  		else if (count == 1)
+  			width2 = red_tile_width_mm();
+  		else
+  			width3 = red_tile_width_mm();
+  		count++;
+  	}
+  	else
+  		blue_tile();
+	}
+	int max = max_value(width1, width2, width3);
+	displayString(7,"%d",width1);
+	displayString(8,"%d",width2);
+	displayString(9,"%d",width3);
+	displayString(5,"%d", max);
+	wait1Msec(10000);
+}
