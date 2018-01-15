@@ -9,3 +9,4 @@ Contributors:
 6) Julie Lee
 7) Sumaiya Islam
 8) Vishvam Mazumdar
+9) Ryan Consell (DealCards function)
